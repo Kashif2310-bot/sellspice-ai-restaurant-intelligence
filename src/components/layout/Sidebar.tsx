@@ -4,7 +4,7 @@ import { motion } from "framer-motion";
 
 const nav = [
   { to: "/app", icon: LayoutDashboard, label: "Overview", end: true },
-  { to: "/app/billing", icon: Receipt, label: "Live Billing" },
+  { to: "/app/billing", icon: Receipt, label: "Billing Intelligence" },
   { to: "/app/scan", icon: ScanLine, label: "Bill Scanner" },
   { to: "/app/inventory", icon: Boxes, label: "Inventory" },
   { to: "/app/forecast", icon: TrendingUp, label: "Forecast" },

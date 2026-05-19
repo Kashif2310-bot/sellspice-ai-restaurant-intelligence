@@ -128,7 +128,7 @@ async function fetchLiveContext(ownerMemory: string[]): Promise<LiveContext> {
   };
 }
 
-function buildSystemPrompt(ctx: LiveContext, memory: string[]): string {
+function buildSystemPrompt(ctx: LiveContext, memory: string[], liveContext?: Record<string, unknown>): string {
   const wToday = ctx.weatherToday.map(w => `  • ${w.label} (${w.hours}) — ${w.avgTempC}°C, ${w.condition}, rain ${w.maxRainPct}%`).join('\n');
   const wTom = ctx.weatherTomorrow.map(w => `  • ${w.label} (${w.hours}) — ${w.avgTempC}°C, ${w.condition}, rain ${w.maxRainPct}%`).join('\n');
   const mem = memory.length ? memory.map((m, i) => `  ${i + 1}. ${m}`).join('\n') : '  (none yet)';
@@ -156,11 +156,14 @@ ${ctx.festivalsThisWeek.length ? ctx.festivalsThisWeek.map(x => `  • ${x}`).jo
 OWNER'S PRIVATE MEMORY (things the owner has told you previously — always honor):
 ${mem}
 
+╔══ LIVE BUSINESS DATA (from SELLSPICE OS — ground truth) ══╗
+${liveContext ? JSON.stringify(liveContext, null, 2) : `• Cuisine: Burgers, Sides, Shakes, Desserts, Long Breads — Truffles Sanjaynagar
+• Sales peaks: 1 PM lunch, 7–9 PM dinner, student crowd 5–10 PM (MS Ramaiah)
+• Prices inclusive of 5% GST · packaging extra`}
+
 ╔══ BUSINESS SNAPSHOT ══╗
-• Cuisine: Burgers, Steaks, Shakes, Pasta, Mexican
-• Top sellers: Mexican Burger (₹350), Steak Truffles Special (₹700), Death by Chocolate Shake (₹220), Chicken Steak (₹500), Pasta Alfredo (₹320), Cold Coffee (₹150)
-• Avg ticket: ₹520 · Daily covers ~480 · Gross margin ~34%
-• Inventory critical today: Beef Patty (25 left), Chocolate Syrup (1.1L), Tomato (7kg)
+• Location: Truffles · 80 Feet Road, Sanjaynagar, Bangalore
+• Student combos, peri-peri burgers, Death by Chocolate, Thicc Shakes are signature movers
 • Sales velocity peaks: 1 PM, 7–9 PM. Slump: 3–5 PM.
 
 ╔══ THINKING PROTOCOL (follow internally for EVERY answer) ══╗
@@ -200,7 +203,7 @@ Deno.serve(async (req) => {
   if (req.method === 'OPTIONS') return new Response('ok', { headers: corsHeaders });
 
   try {
-    const { messages, memory = [] } = await req.json();
+    const { messages, memory = [], liveContext } = await req.json();
     if (!Array.isArray(messages)) {
       return new Response(JSON.stringify({ error: 'messages must be an array' }), {
         status: 400, headers: { ...corsHeaders, 'Content-Type': 'application/json' },
@@ -211,7 +214,7 @@ Deno.serve(async (req) => {
     if (!LOVABLE_API_KEY) throw new Error('LOVABLE_API_KEY not configured');
 
     const ctx = await fetchLiveContext(memory);
-    const systemPrompt = buildSystemPrompt(ctx, memory);
+    const systemPrompt = buildSystemPrompt(ctx, memory, liveContext);
 
     // Detect memory candidates from latest user message
     const lastUser = [...messages].reverse().find((m: { role: string }) => m.role === 'user');

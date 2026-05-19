@@ -1,5 +1,5 @@
 import { Topbar } from "@/components/layout/Topbar";
-import { socialIdeas } from "@/lib/mockData";
+import { socialIdeas } from "@/lib/socialContent";
 import { Flame, Heart, Share2, Sparkles } from "lucide-react";
 import { motion } from "framer-motion";
 

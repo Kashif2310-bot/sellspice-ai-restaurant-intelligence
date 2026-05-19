@@ -1,4 +1,6 @@
 import { Topbar } from "@/components/layout/Topbar";
+import { useRestaurant } from "@/context/RestaurantContext";
+import { getLiveContextForAI } from "@/lib/restaurantStore";
 import { motion, AnimatePresence } from "framer-motion";
 import { Send, Sparkles, User, Brain, Cloud, Plus, X, Zap } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
@@ -28,6 +30,7 @@ const THINK_STEPS = [
 const MEM_KEY = "sellspice:memory:v1";
 
 export default function Assistant() {
+  const { snapshot } = useRestaurant();
   const [msgs, setMsgs] = useState<Msg[]>(seed);
   const [input, setInput] = useState("");
   const [streaming, setStreaming] = useState(false);
@@ -83,6 +86,7 @@ export default function Assistant() {
         body: JSON.stringify({
           messages: next.map(({ role, content }) => ({ role, content })),
           memory,
+          liveContext: getLiveContextForAI(snapshot),
         }),
       });
 

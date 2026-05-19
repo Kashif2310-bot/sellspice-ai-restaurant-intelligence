@@ -2,3 +2,6 @@ project_id = "zxwzfdzmtuoqupbbuecl"
 
 [functions.ai-assistant]
 verify_jwt = false
+
+[functions.parse-bill]
+verify_jwt = false
