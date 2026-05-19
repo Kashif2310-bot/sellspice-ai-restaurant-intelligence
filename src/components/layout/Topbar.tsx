@@ -16,7 +16,7 @@ export const Topbar = ({ title, subtitle }: { title: string; subtitle?: string }
         <Bell className="w-4 h-4" />
       </button>
       <div className="w-10 h-10 rounded-lg bg-gradient-primary flex items-center justify-center font-display font-bold text-primary-foreground">
-        S
+        T
       </div>
     </div>
   </header>

@@ -55,7 +55,8 @@ export const Sidebar = () => {
 
       <div className="m-3 p-4 rounded-xl glass">
         <div className="text-xs text-muted-foreground mb-1">Workspace</div>
-        <div className="font-display font-semibold">Spice Garden HQ</div>
+        <div className="font-display font-semibold">Truffles · Sanjaynagar</div>
+        <div className="text-[10px] text-muted-foreground font-mono mt-0.5">80FT Road · BLR</div>
         <div className="mt-3 flex items-center gap-2 text-xs">
           <div className="w-2 h-2 rounded-full bg-primary animate-pulse-glow" />
           <span className="text-primary">AI active · learning</span>
